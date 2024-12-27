@@ -58,7 +58,7 @@ function Navbar() {
             <nav
                 className={`flex items-center justify-between fixed top-0 left-0 right-0 z-50 transition-all ${
                     scrolled ? " backdrop-blur-lg shadow-lg" : "bg-transparent"
-                } lg:py-3 lg:px-28 px-8 md:z-100`}
+                } lg:py-3 lg:px-28 pr-1 pl-8  md:z-100`}
             >
                 <div>
                     <Link

@@ -51,10 +51,10 @@ function Hero() {
             <div className="absolute rounded-full filter blur-[60px] opacity-50 z-[-1] w-[550px] h-[500px] bg-gradient-to-r from-red-500 to-transparent bottom-15 right-[2rem] hidden lg:block"></div>
             <div className="flex items-center justify-between w-full flex-col lg:flex-row text-center lg:text-left">
                 <div
-                    className={`flex flex-col flex-1 gap-6 pr-8 lg:pr-8 text-black antialiased ${neueMontrealThin.className}`}
+                    className={`flex flex-col justify-center flex-1 gap-6 lg:pr-8 text-black antialiased ${neueMontrealThin.className}`}
                 >
                     <motion.div
-                        className="text-6xl lg:text-[9rem] font-semibold flex items-center justify-center lg:justify-start gap-8 tracking-tight"
+                        className="text-5xl lg:text-[9rem] font-semibold flex items-center justify-center lg:justify-start gap-8 tracking-tight"
                         initial="hidden"
                         animate={isVisible ? "visible" : "hidden"}
                         variants={fadeInFromBottom}
