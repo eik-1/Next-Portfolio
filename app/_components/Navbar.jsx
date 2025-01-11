@@ -82,7 +82,7 @@ function Navbar() {
                         BLOGS
                     </Link>
                     <ResumeButton
-                        href="https://drive.google.com/file/d/1yivpQlXRbVlX28Qpk9_fIm-YERRxlfYc/view?usp=sharing"
+                        href="https://drive.google.com/file/d/1V68tKrn8OXsa5wlWy5S3EoB5hH_444-f/view?usp=sharing"
                         buttonStyle="relative inline-block px-5 py-[10px] border border-black cursor-pointer overflow-hidden transition-colors duration-300 text-black hover:text-gray-100"
                     />
                 </div>
@@ -125,7 +125,7 @@ function Navbar() {
                                 BLOGS
                             </Link>
                             <ResumeButton
-                                href="https://drive.google.com/file/d/1yivpQlXRbVlX28Qpk9_fIm-YERRxlfYc/view?usp=sharing"
+                                href="https://drive.google.com/file/d/1V68tKrn8OXsa5wlWy5S3EoB5hH_444-f/view?usp=sharing"
                                 buttonStyle="relative inline-block px-5 py-3 border border-black cursor-pointer text-black overflow-hidden transition-colors duration-300 hover:text-gray-300"
                             />
                         </div>

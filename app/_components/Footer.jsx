@@ -1,6 +1,8 @@
 import { gtAlpina } from "@/app/fonts/fonts"
 import Link from "next/link"
 
+export const revalidate = 36000
+
 function Footer() {
     const currentYear = new Date().getFullYear()
     return (
