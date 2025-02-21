@@ -34,7 +34,7 @@ export const projects = [
             { Icon: JavascriptOriginal, name: "JavaScript" },
             { Icon: TailwindcssOriginal, name: "Tailwind CSS" },
         ],
-        link: "https://snapstudio.vercel.app",
+        link: "https://snapstudio.me",
         github: {
             isPrivate: true,
             url: "",
@@ -61,7 +61,7 @@ export const projects = [
             { Icon: GraphqlPlain, name: "GraphQL" },
             { Icon: ExpressOriginal, name: "Express" },
         ],
-        link: "https://locs-nu.vercel.app",
+        link: "https://dbeats.vercel.app",
         github: {
             isPrivate: false,
             url: "https://github.com/eik-1/dbeats",
