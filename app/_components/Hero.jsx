@@ -3,7 +3,7 @@
 import { Environment, OrbitControls } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
 import { motion } from "framer-motion"
-import { Instagram, Linkedin } from "lucide-react"
+import { Linkedin } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -117,14 +117,6 @@ function Hero() {
                                 className="flex items-center justify-center w-10 h-10 text-black"
                             >
                                 <Linkedin size={24} />
-                            </Link>
-                            <Link
-                                href="https://www.instagram.com/eik.eth/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center w-10 h-10 text-black"
-                            >
-                                <Instagram size={24} />
                             </Link>
                             <Link
                                 href="https://medium.com/@sarthakrawatbiz"
