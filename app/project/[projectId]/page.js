@@ -6,6 +6,14 @@ import Chainlink from "@/public/Chainlink.svg"
 import Image from "next/image"
 import Link from "next/link"
 
+export function generateStaticParams() {
+    return projects.map((project) => ({
+        projectId: project.title.toLowerCase(),
+    }))
+}
+
+export const revalidate = 604800
+
 export default function ProjectPage({ params }) {
     const title = params.projectId
     const project = projects.find(

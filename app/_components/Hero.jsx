@@ -17,6 +17,9 @@ import ShinyButton from "./magicui/ShinyButton"
 
 const Ethereum = dynamic(() => import("@/public/Ethereum"), {
     ssr: false,
+    loading: () => <div className="w-full h-full bg-transparent" />,
+    // Lower priority means it won't block other resources
+    priority: false,
 })
 
 function Hero() {
