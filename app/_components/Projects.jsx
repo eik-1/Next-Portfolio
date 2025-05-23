@@ -33,7 +33,6 @@ function ProjectCard({ project }) {
                         src={project.img}
                         alt={project.title}
                         quality={80}
-                        placeholder="blur"
                         className="projectImage w-full h-full cursor-pointer object-cover transition-transform duration-300 ease-in-out
                         group-hover:scale-105"
                     />

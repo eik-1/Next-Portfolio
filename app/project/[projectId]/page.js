@@ -89,7 +89,7 @@ export default function ProjectPage({ params }) {
                             </button>
                         ) : (
                             <Link
-                                href={project.github}
+                                href={project.github.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="py-2 px-4 flex gap-1 items-center tracking-wide border border-black bg-transparent text-black no-underline rounded transition-colors duration-300 justify-center hover:border-red-500"
