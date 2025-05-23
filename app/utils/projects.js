@@ -61,13 +61,13 @@ export const projects = [
             { Icon: GraphqlPlain, name: "GraphQL" },
             { Icon: ExpressOriginal, name: "Express" },
         ],
-        link: "https://dbeats.vercel.app",
+        link: "https://dbeats-base.vercel.app",
         github: {
             isPrivate: false,
-            url: "https://github.com/eik-1/dbeats",
+            url: "https://github.com/eik-1/dbeats-base",
         },
         paragraph1:
-            "DBeats is a decentralized music marketplace, designed to empower artists by allowing them to mint, showcase, and sell their music NFTs. The application features user profiles where artists can manage their information, apply for artist status, and display their minted tracks. It utilizes a React frontend with a responsive design, ensuring a seamless user experience across devices.",
+            "DBeats is a decentralized music marketplace on Base, designed to empower artists by allowing them to mint, showcase, and sell their music NFTs. It was submitted to the Base India Batch 001. The application features user profiles where artists can manage their information, apply for artist status, and display their minted tracks. It utilizes a React frontend with a responsive design, ensuring a seamless user experience across devices.",
         paragraph2:
             "The tech stack includes React for the frontend, utilizing libraries such as React Router for navigation and TanStack Query for data fetching. The styling is managed with Tailwind CSS, providing a utility-first approach to design. The backend is powered by Node.js, Express, and MongoDB for data storage, with GraphQL for querying NFT data. Smart contracts are developed using Solidity & Hardhat, with the project also leveraging Web3Modal for wallet connections. The project is structured to facilitate easy deployment and scalability, making it a robust solution for music artists in the NFT space.",
     },
