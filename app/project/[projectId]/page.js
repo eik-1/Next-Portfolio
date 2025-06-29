@@ -3,12 +3,13 @@ import { ArrowUpRight, Globe, LockKeyhole } from "lucide-react"
 import { geist, neueMontrealThin } from "@/app/fonts/fonts"
 import { projects } from "@/app/utils/projects"
 import Chainlink from "@/public/Chainlink.svg"
+import viem from "@/public/viem.png"
 import Image from "next/image"
 import Link from "next/link"
 
 export function generateStaticParams() {
     return projects.map((project) => ({
-        projectId: project.title.toLowerCase(),
+        projectId: project.title.toLowerCase().replace(/ /g, "%20"),
     }))
 }
 
@@ -17,7 +18,8 @@ export const revalidate = 604800
 export default function ProjectPage({ params }) {
     const title = params.projectId
     const project = projects.find(
-        (p) => p.title.toLowerCase() === title.toLowerCase(),
+        (p) =>
+            p.title.toLowerCase() === title.toLowerCase().replace(/%20/g, " "),
     )
 
     // if (!project) {
@@ -30,7 +32,6 @@ export default function ProjectPage({ params }) {
                 <Image
                     src={project.img}
                     alt={project.title}
-                    placeholder="blur"
                     quality={80}
                     className="lg:w-1/2 w-full object-cover rounded-xl shadow-md"
                 />
@@ -56,6 +57,18 @@ export default function ProjectPage({ params }) {
                                 />
                                 <span className="invisible bg-black text-gray-200 text-center rounded-md px-2 py-1 absolute z-1 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
                                     Chainlink
+                                </span>
+                            </div>
+                        )}
+                        {project.viem && (
+                            <div className="relative inline-block group">
+                                <Image
+                                    src={viem}
+                                    alt="Viem"
+                                    className="w-6 h-6"
+                                />
+                                <span className="invisible bg-black text-gray-200 text-center rounded-md px-2 py-1 absolute z-1 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
+                                    Viem
                                 </span>
                             </div>
                         )}

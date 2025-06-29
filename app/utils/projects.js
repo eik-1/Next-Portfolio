@@ -1,5 +1,6 @@
 import dBeats from "@/public/dbeats.webp"
 import snapStudio from "@/public/snap_studio.png"
+import nolo from "@/public/nolo.png"
 import {
     ExpressOriginal,
     GraphqlPlain,
@@ -19,6 +20,8 @@ import {
     TypescriptOriginal,
 } from "devicons-react"
 
+import viem from "@/public/viem.png"
+
 export const projects = [
     {
         id: 1,
@@ -27,6 +30,7 @@ export const projects = [
         img: snapStudio,
         img2: "",
         chainlink: false,
+        viem: false,
         iconLists: [
             { Icon: ReactOriginal, name: "React" },
             { Icon: SupabaseOriginal, name: "Supabase" },
@@ -51,6 +55,7 @@ export const projects = [
         img: dBeats,
         img2: "",
         chainlink: true,
+        viem: false,
         iconLists: [
             { Icon: SolidityOriginal, name: "Solidity" },
             { Icon: HardhatOriginal, name: "Hardhat" },
@@ -70,5 +75,30 @@ export const projects = [
             "DBeats is a decentralized music marketplace on Base, designed to empower artists by allowing them to mint, showcase, and sell their music NFTs. It was submitted to the Base India Batch 001. The application features user profiles where artists can manage their information, apply for artist status, and display their minted tracks. It utilizes a React frontend with a responsive design, ensuring a seamless user experience across devices.",
         paragraph2:
             "The tech stack includes React for the frontend, utilizing libraries such as React Router for navigation and TanStack Query for data fetching. The styling is managed with Tailwind CSS, providing a utility-first approach to design. The backend is powered by Node.js, Express, and MongoDB for data storage, with GraphQL for querying NFT data. Smart contracts are developed using Solidity & Hardhat, with the project also leveraging Web3Modal for wallet connections. The project is structured to facilitate easy deployment and scalability, making it a robust solution for music artists in the NFT space.",
+    },
+    {
+        id: 3,
+        title: "NoLo Lottery",
+        des: "No Loss Yield Lottery",
+        img: nolo,
+        img2: "",
+        chainlink: true,
+        viem: true,
+        iconLists: [
+            { Icon: SolidityOriginal, name: "Solidity" },
+            { Icon: TypescriptOriginal, name: "TypeScript" },
+            { Icon: NextjsPlain, name: "NextJs" },
+            { Icon: TailwindcssOriginal, name: "Tailwind CSS" },
+            { Icon: GraphqlPlain, name: "GraphQL" },
+        ],
+        link: "https://no-loss-yield-lottery-mu.vercel.app",
+        github: {
+            isPrivate: false,
+            url: "https://github.com/eik-1/No-Loss-Yield-Lottery",
+        },
+        paragraph1:
+            "NoLo is a no-loss yield lottery decentralized application. Participants enter the lottery by staking LINK tokens into a collective pool. This capital is then put to work in a decentralized finance (DeFi) protocol called Aave to generate yield. The accumulated yield from all staked LINK forms the prize, which is awarded to a single, randomly selected winner at the end of each round. The key feature is that participants can withdraw their initial stake at any time, meaning they only risk their potential earnings, not their principal.",
+        paragraph2:
+            "The application's backend is powered by a Solidity-based smart contract, developed and tested using the Foundry framework. It leverages Chainlink Automation for triggering round resets & winner selection and Chainlink VRF (Verifiable Random Function) to ensure provably fair winner selection. The UI is a dynamic Next.js application built with TypeScript and styled using Tailwind CSS. It connects to the blockchain via Wagmi, providing a smooth and intuitive experience for users to manage their stake and participate in the lottery.",
     },
 ]
