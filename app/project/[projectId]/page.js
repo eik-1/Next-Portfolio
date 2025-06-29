@@ -9,7 +9,7 @@ import Link from "next/link"
 
 export function generateStaticParams() {
     return projects.map((project) => ({
-        projectId: project.title.toLowerCase().replace(/ /g, "%20"),
+        projectId: project.title.toLowerCase().replace(/ /g, "-"),
     }))
 }
 
@@ -18,13 +18,8 @@ export const revalidate = 604800
 export default function ProjectPage({ params }) {
     const title = params.projectId
     const project = projects.find(
-        (p) =>
-            p.title.toLowerCase() === title.toLowerCase().replace(/%20/g, " "),
+        (p) => p.title.toLowerCase() === title.toLowerCase().replace(/-/g, " "),
     )
-
-    // if (!project) {
-    //     return <div className={styles.notFound}>Project not found</div>
-    // }
 
     return (
         <div className="max-w-[1200px] min-h-screen mx-auto lg:mt-24 lg:mb-20 mt-28 mb-12 p-4">
