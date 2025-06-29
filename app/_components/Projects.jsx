@@ -28,7 +28,11 @@ function ProjectCard({ project }) {
                 onMouseLeave={() => setIsHovered(false)}
                 onMouseMove={handleMouseMove}
             >
-                <Link href={`project/${project.title.toLowerCase()}`}>
+                <Link
+                    href={`project/${project.title
+                        .toLowerCase()
+                        .replace(/ /g, "-")}`}
+                >
                     <Image
                         src={project.img}
                         alt={project.title}

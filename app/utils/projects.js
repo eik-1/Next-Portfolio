@@ -20,8 +20,6 @@ import {
     TypescriptOriginal,
 } from "devicons-react"
 
-import viem from "@/public/viem.png"
-
 export const projects = [
     {
         id: 1,
