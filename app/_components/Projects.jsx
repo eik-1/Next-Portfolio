@@ -42,7 +42,7 @@ function ProjectCard({ project }) {
                     />
                     {isHovered && (
                         <motion.div
-                            className="fixed bg-inherit backdrop-blur-md text-black py-2 px-4 rounded-full font-bold transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-300 ease-in-out z-50"
+                            className="fixed bg-inherit backdrop-blur-md text-on-surface py-2 px-4 rounded-full font-bold transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-300 ease-in-out z-50"
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             style={{
@@ -58,9 +58,9 @@ function ProjectCard({ project }) {
                     )}
                 </Link>
             </motion.div>
-            <div className="p-2 bg-transparent text-black">
+            <div className="pt-3 bg-transparent text-on-surface">
                 <h2 className="text-xl font-bold">{project.title}</h2>
-                <p className="text-sm text-gray-600">{project.des}</p>
+                <p className="text-sm text-muted mt-1">{project.des}</p>
             </div>
         </div>
     )
@@ -76,9 +76,9 @@ function Projects() {
     const opacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1])
 
     return (
-        <motion.div className="lg:min-h-screen overflow-hidden pb-20 lg:pt-0 lg:pb-20 lg:px-28 md:pb-12">
+        <motion.div className="lg:min-h-screen overflow-hidden pb-20 lg:pt-0 lg:pb-20 px-8 lg:px-28">
             <motion.h1
-                className={`${gtAlpina.className} lg:text-[8rem] tracking-normal font-thin lg:mb-20 mb-12 lg:text-left md:text-[5.5rem] text-center pl-0 text-[5rem]`}
+                className={`${gtAlpina.className} lg:text-[8rem] tracking-normal font-thin lg:mb-20 mb-12 lg:text-left md:text-[5.5rem] text-center text-[5rem]`}
                 initial={{ x: 100, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -86,7 +86,7 @@ function Projects() {
                 <span>Projects</span>
             </motion.h1>
             <motion.div
-                className="grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-10 lg:px-2 px-7"
+                className="grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-10"
                 initial={{ y: 50, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}

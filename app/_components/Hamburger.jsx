@@ -14,26 +14,27 @@ export default function HamburgerButton({ isOpen, toggleMenu }) {
                 initial={false}
                 animate={isOpen ? "open" : "closed"}
                 onClick={toggleMenu}
-                className="relative h-20 w-20 rounded-full bg-white/0 transition-colors"
+                className="relative h-12 w-12 rounded-full transition-colors"
+                aria-label="Toggle menu"
             >
                 <motion.span
                     variants={VARIANTS.top}
-                    className="absolute h-1 w-10 bg-black"
+                    className="absolute h-[2px] w-6 bg-on-surface rounded-full"
                     style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
                 />
                 <motion.span
                     variants={VARIANTS.middle}
-                    className="absolute h-1 w-10 bg-black"
+                    className="absolute h-[2px] w-6 bg-on-surface rounded-full"
                     style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
                 />
                 <motion.span
                     variants={VARIANTS.bottom}
-                    className="absolute h-1 w-5 bg-black"
+                    className="absolute h-[2px] w-3.5 bg-on-surface rounded-full"
                     style={{
                         x: "-50%",
                         y: "50%",
                         bottom: "35%",
-                        left: "calc(50% + 10px)",
+                        left: "calc(50% + 5px)",
                     }}
                 />
             </motion.button>
@@ -69,7 +70,7 @@ const VARIANTS = {
         closed: {
             rotate: ["45deg", "0deg", "0deg"],
             bottom: ["50%", "50%", "35%"],
-            left: "calc(50% + 10px)",
+            left: "calc(50% + 5px)",
         },
     },
 }

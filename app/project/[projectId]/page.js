@@ -22,7 +22,7 @@ export default function ProjectPage({ params }) {
     )
 
     return (
-        <div className="max-w-[1200px] min-h-screen mx-auto lg:mt-24 lg:mb-20 mt-28 mb-12 p-4">
+        <div className="max-w-[1200px] min-h-screen mx-auto pt-28 lg:pt-24 pb-12 lg:pb-20 px-8 lg:px-12">
             <div className="flex lg:flex-row flex-col lg:gap-12 gap-6 mb-8">
                 <Image
                     src={project.img}
@@ -37,11 +37,11 @@ export default function ProjectPage({ params }) {
                         {project.title}
                     </h1>
                     <p
-                        className={`lg:text-2xl text-xl mb-4 antialiased ${neueMontrealThin.className} font-extrabold tracking-wide`}
+                        className="lg:text-2xl text-xl mb-4 antialiased tracking-wide"
                     >
                         {project.des}
                     </p>
-                    <hr className="border-0 h-px bg-gray-400 my-5" />
+                    <hr className="border-0 h-px bg-border my-5" />
                     <div className="w-fit rounded-[50px] flex lg:flex-nowrap flex-wrap justify-center gap-4 mb-12 relative">
                         {project.chainlink && (
                             <div className="relative inline-block group">
@@ -50,7 +50,7 @@ export default function ProjectPage({ params }) {
                                     alt="Chainlink"
                                     className="w-6 h-6"
                                 />
-                                <span className="invisible bg-black text-gray-200 text-center rounded-md px-2 py-1 absolute z-1 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
+                                <span className="invisible bg-tooltip-bg text-tooltip-text text-center rounded-md px-2 py-1 absolute z-10 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
                                     Chainlink
                                 </span>
                             </div>
@@ -62,7 +62,7 @@ export default function ProjectPage({ params }) {
                                     alt="Viem"
                                     className="w-6 h-6"
                                 />
-                                <span className="invisible bg-black text-gray-200 text-center rounded-md px-2 py-1 absolute z-1 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
+                                <span className="invisible bg-tooltip-bg text-tooltip-text text-center rounded-md px-2 py-1 absolute z-10 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
                                     Viem
                                 </span>
                             </div>
@@ -73,7 +73,7 @@ export default function ProjectPage({ params }) {
                                 className="relative inline-block group"
                             >
                                 <Icon size={24} />
-                                <span className="invisible bg-black text-gray-200 text-center rounded-md px-2 py-1 absolute z-1 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
+                                <span className="invisible bg-tooltip-bg text-tooltip-text text-center rounded-md px-2 py-1 absolute z-10 bottom-[125%] left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 text-sm whitespace-nowrap group-hover:visible group-hover:opacity-100">
                                     {name}
                                 </span>
                             </div>
@@ -84,14 +84,14 @@ export default function ProjectPage({ params }) {
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="py-2 px-4 flex gap-1 items-center tracking-wide bg-black text-gray-200 no-underline rounded transition-colors duration-300 hover:bg-red-500 justify-center"
+                            className="py-2 px-4 flex gap-1 items-center tracking-wide bg-on-surface text-tooltip-text no-underline rounded transition-colors duration-300 hover:bg-accent justify-center"
                         >
                             LIVE <ArrowUpRight size={24} />
                         </Link>
                         {project.github.isPrivate ? (
                             <button
                                 disabled
-                                className="py-2 px-4 flex gap-2 items-center tracking-wide  text-black border border-black rounded justify-center"
+                                className="py-2 px-4 flex gap-2 items-center tracking-wide text-muted border border-border rounded justify-center cursor-not-allowed opacity-60"
                             >
                                 GITHUB <LockKeyhole size={18} />
                             </button>
@@ -100,7 +100,7 @@ export default function ProjectPage({ params }) {
                                 href={project.github.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="py-2 px-4 flex gap-1 items-center tracking-wide border border-black bg-transparent text-black no-underline rounded transition-colors duration-300 justify-center hover:border-red-500"
+                                className="py-2 px-4 flex gap-1 items-center tracking-wide border border-on-surface bg-transparent text-on-surface no-underline rounded transition-colors duration-300 justify-center hover:border-accent hover:text-accent"
                             >
                                 GITHUB <Globe size={22} />
                             </Link>
@@ -108,12 +108,12 @@ export default function ProjectPage({ params }) {
                     </div>
                 </div>
             </div>
-            <hr className="border-0 h-px bg-gray-400 my-5" />
-            <div className={`mt-8 antialiased ${geist.variable}`}>
-                <p className="lg:text-2xl text-lg leading-6 mb-4">
+            <hr className="border-0 h-px bg-border my-5" />
+            <div className={`mt-8 antialiased ${geist.className}`}>
+                <p className="lg:text-2xl text-lg leading-7 lg:leading-8 mb-4 text-on-surface">
                     {project.paragraph1}
                 </p>
-                <p className="lg:text-2xl text-lg leading-6 mb-4">
+                <p className="lg:text-2xl text-lg leading-7 lg:leading-8 mb-4 text-on-surface">
                     {project.paragraph2}
                 </p>
             </div>

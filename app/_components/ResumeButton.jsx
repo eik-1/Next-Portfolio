@@ -1,3 +1,5 @@
+"use client"
+
 import { motion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 
@@ -18,7 +20,7 @@ const ResumeButton = ({ href, buttonStyle }) => {
                 RESUME <ArrowUpRight />
             </motion.span>
             <motion.div
-                className="absolute top-0 left-0 w-full h-full bg-black origin-left"
+                className="absolute top-0 left-0 w-full h-full bg-on-surface origin-left"
                 initial={{ scaleX: 0 }}
                 variants={{
                     hover: { scaleX: 1 },

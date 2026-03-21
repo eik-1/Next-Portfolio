@@ -8,7 +8,7 @@ function AboutImage() {
             <Image
                 src={myPic}
                 alt="myPic"
-                className="lg:h-[300px] lg:w-[300px] object-cover border border-gray-300 h-[200px] w-[200px]"
+                className="lg:h-[300px] lg:w-[300px] object-cover border border-border h-[200px] w-[200px]"
             />
         </div>
     )

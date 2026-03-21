@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body
-                className={`${neueMontrealMedium.className} antialiased flex flex-col min-h-screen text-black bg-gray-100`}
+                className={`${neueMontrealMedium.className} antialiased flex flex-col min-h-screen text-on-surface bg-surface`}
             >
                 <ClientPreloader>
                     <Navbar />
