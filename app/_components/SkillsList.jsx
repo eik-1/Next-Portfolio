@@ -47,7 +47,7 @@ const SkillsList = ({ skills }) => {
     return (
         <section
             ref={componentRef}
-            className="lg:min-h-screen overflow-hidden pb-12 lg:pt-0 lg:pb-20 lg:px-28 md:pb-12"
+            className="lg:min-h-screen overflow-hidden pb-12 lg:pt-0 lg:pb-20 px-8 lg:px-28 md:pb-12"
         >
             <div className="max-w-[600px] lg:max-w-full">
                 <motion.h1
@@ -61,7 +61,7 @@ const SkillsList = ({ skills }) => {
                 {skills.map((skill, index) => (
                     <div
                         key={index}
-                        className="skillRow lg:mb-0 lg:mt-8 lg:min-h-[100px] min-h-[80px] flex items-center justify-center relative text-black/30"
+                        className="skillRow lg:mb-0 lg:mt-8 lg:min-h-[100px] min-h-[80px] flex items-center justify-center relative text-on-surface/30"
                         aria-label={skill.name}
                     >
                         {Array.from({ length: 15 }, (_, i) => (

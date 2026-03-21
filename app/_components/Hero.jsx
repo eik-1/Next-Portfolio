@@ -1,159 +1,276 @@
 "use client"
 
-import { Environment, OrbitControls } from "@react-three/drei"
-import { Canvas } from "@react-three/fiber"
 import { motion } from "framer-motion"
 import { Linkedin } from "lucide-react"
-import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
-import React, { Suspense, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
-import { gtAlpina, neueMontrealThin } from "@/app/fonts/fonts.js"
-import wavingHand from "@/public/apple_waving.png"
+// Commented out: 3D Ethereum model
+// import { Environment, OrbitControls } from "@react-three/drei"
+// import { Canvas } from "@react-three/fiber"
+// import dynamic from "next/dynamic"
+// import { Suspense } from "react"
+// const Ethereum = dynamic(() => import("@/public/Ethereum"), {
+//     ssr: false,
+//     loading: () => null,
+//     priority: false,
+// })
+
+import { gtAlpina } from "@/app/fonts/fonts.js"
 import medium from "@/public/medium.svg"
+import myPic from "@/public/mypic2.jpeg"
 import X from "@/public/x.svg"
 import ShinyButton from "./magicui/ShinyButton"
 
-const Ethereum = dynamic(() => import("@/public/Ethereum"), {
-    ssr: false,
-    loading: () => null,
-    // Lower priority means it won't block other resources
-    priority: false,
-})
+const MARQUEE_ITEMS = [
+    "SOLIDITY",
+    "TYPESCRIPT",
+    "RUST",
+    "REACT",
+    "NEXT.JS",
+    "FOUNDRY",
+    "VIEM",
+    "EXPRESS",
+    "POSTGRESQL",
+    "REDIS",
+    "AWS",
+    "CLOUDFLARE",
+    "DOCKER",
+    "SUPABASE",
+    "HARDHAT",
+]
 
 function Hero() {
     const [isVisible, setIsVisible] = useState(false)
+    const [time, setTime] = useState("")
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsVisible(true)
-        }, 300)
-
+        const timer = setTimeout(() => setIsVisible(true), 300)
         return () => clearTimeout(timer)
     }, [])
 
-    const fadeInFromBottom = {
-        hidden: {
-            opacity: 0,
-            y: 50,
-        },
+    useEffect(() => {
+        const update = () => {
+            setTime(
+                new Date().toLocaleTimeString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                })
+            )
+        }
+        update()
+        const interval = setInterval(update, 60000)
+        return () => clearInterval(interval)
+    }, [])
+
+    const stagger = {
+        hidden: {},
         visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.8,
-                ease: "easeOut",
-                delay: 0.2,
-            },
+            transition: { staggerChildren: 0.15, delayChildren: 0.1 },
         },
     }
 
-    return (
-        <section className="flex items-center justify-between min-h-screen p-8 mt-8 lg:px-28 relative overflow-hidden">
-            <div className="absolute rounded-full filter blur-[60px] opacity-50 z-[-1] w-[550px] h-[500px] bg-gradient-to-r from-red-500 to-transparent bottom-15 right-[2rem] hidden lg:block"></div>
-            <div className="flex items-center justify-between w-full flex-col lg:flex-row text-center lg:text-left">
-                <div
-                    className={`flex flex-col justify-center flex-1 gap-6 lg:pr-8 text-black antialiased ${neueMontrealThin.className}`}
-                >
-                    <motion.div
-                        className="text-5xl lg:text-[9rem] font-semibold flex items-center justify-center lg:justify-start gap-8 tracking-tight"
-                        initial="hidden"
-                        animate={isVisible ? "visible" : "hidden"}
-                        variants={fadeInFromBottom}
-                    >
-                        <Image
-                            className="w-16 h-16 lg:w-24 lg:h-24"
-                            src={wavingHand}
-                            alt="waving hand"
-                            width={100}
-                            height={100}
-                            quality={100}
-                            placeholder="blur"
-                        />
-                        <h1>
-                            Hi, I&apos;m{" "}
-                            <span
-                                className={`${gtAlpina.className} antialiased lg:text-[9rem] text-6xl tracking-[1px] font-light relative`}
-                            >
-                                Eik
-                                <span
-                                    className="absolute w-full border-t-4 border-red-500 left-0 bottom-[3px] rounded-full h-3"
-                                    style={{ borderRadius: "100% 100% 0 0" }}
-                                ></span>
-                            </span>
-                        </h1>
-                    </motion.div>
+    const fadeUp = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
+        },
+    }
 
-                    <p
-                        className={`text-xl ${neueMontrealThin.className} md:text-4xl leading-relaxed font-extrabold md:leading-normal`}
-                    >
-                        I&apos;m a full-stack{" "}
-                        <span className="transition-colors duration-300 ease-in-out text-gray-100 bg-red-500 bg-opacity-90 px-2">
-                            Web3
-                        </span>{" "}
-                        developer based in India.
-                        <br />I believe in{" "}
-                        <span className="transition-colors duration-300 ease-in-out text-gray-100 bg-red-500 bg-opacity-90 px-2">
-                            Blockchain
-                        </span>
-                        .
-                    </p>
-                    <div className="flex items-center gap-4 mt-4 flex-col lg:flex-row">
-                        <ShinyButton
-                            text="Visit My GitHub"
-                            githubUrl="https://github.com/eik-1"
-                        />
-                        <div className="flex gap-2 mt-0">
-                            <Link
-                                href="https://x.com/0xeik"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center w-10 h-10 text-black"
-                            >
-                                <Image className="w-5 h-5" src={X} alt="X" />
-                            </Link>
-                            <Link
-                                href="https://www.linkedin.com/in/sarthakeik1/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center w-10 h-10 text-black"
-                            >
-                                <Linkedin size={24} />
-                            </Link>
-                            <Link
-                                href="https://medium.com/@sarthakrawatbiz"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center w-10 h-10 text-black"
-                            >
-                                <Image
-                                    className="w-7.5 h-7.5"
-                                    src={medium}
-                                    alt="medium"
-                                />
-                            </Link>
+    const marqueeContent = MARQUEE_ITEMS.map((item, i) => (
+        <span
+            key={i}
+            className="flex-shrink-0 text-[0.7rem] tracking-[0.25em] text-on-surface/25 uppercase whitespace-nowrap"
+        >
+            {item}
+            <span className="text-accent/40 mx-5">·</span>
+        </span>
+    ))
+
+    return (
+        <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+            {/* === Content === */}
+            <motion.div
+                className="relative z-10 w-full"
+                variants={stagger}
+                initial="hidden"
+                animate={isVisible ? "visible" : "hidden"}
+            >
+                {/* === Photo + Name + Role === */}
+                <motion.div
+                    className="flex flex-col items-center lg:items-center lg:flex-row gap-6 lg:gap-10 px-8 lg:px-28"
+                    variants={fadeUp}
+                >
+                    {/* Photo */}
+                    <div className="relative flex-shrink-0">
+                        <div className="rounded-full p-[3px] bg-gradient-to-br from-accent/40 via-accent/10 to-transparent">
+                            <Image
+                                src={myPic}
+                                alt="Eik"
+                                className="w-24 h-24 lg:w-[130px] lg:h-[130px] rounded-full object-cover border-[3px] border-surface"
+                                width={130}
+                                height={130}
+                                quality={90}
+                            />
                         </div>
                     </div>
-                </div>
-                <div className="w-full lg:w-2/5 h-[600px] bg-transparent hidden lg:block">
-                    <Canvas>
-                        <ambientLight />
-                        <OrbitControls
-                            enableZoom={false}
-                            enablePan={false}
-                            enableRotate={true}
-                            enableDamping={true}
-                            dampingFactor={0.25}
-                            rotateSpeed={0.5}
-                        />
-                        <Suspense fallback={null}>
-                            <Ethereum />
-                        </Suspense>
-                        <Environment preset="sunset" />
-                    </Canvas>
-                </div>
-            </div>
+
+                    {/* Name */}
+                    <h1 className="flex-shrink-0 text-center lg:text-left" style={{ fontSize: "clamp(3.5rem, 13vw, 13rem)" }}>
+                        <span
+                            className={`${gtAlpina.className} text-[1em] leading-[0.88] tracking-tight text-on-surface relative inline-block`}
+                        >
+                            Eik
+                            <span
+                                className="absolute w-full border-t-[0.025em] border-accent left-0 bottom-[0.05em] h-[0.06em]"
+                                style={{ borderRadius: "100% 100% 0 0" }}
+                            />
+                        </span>
+                        <span className="inline-block w-[0.1em] h-[0.1em] rounded-full bg-accent relative bottom-[0.05em] ml-[0.02em]" />
+                    </h1>
+
+                    {/* Role descriptor — desktop */}
+                    <div className="hidden lg:flex flex-col items-end gap-0.5 ml-auto pb-6">
+                        {["FULL-STACK", "SOFTWARE", "ENGINEER"].map(
+                            (word, i) => (
+                                <motion.span
+                                    key={word}
+                                    className={`text-sm tracking-[0.3em] ${
+                                        i === 0
+                                            ? "text-accent"
+                                            : "text-on-surface/40"
+                                    }`}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={
+                                        isVisible
+                                            ? { opacity: 1, x: 0 }
+                                            : { opacity: 0, x: 20 }
+                                    }
+                                    transition={{
+                                        duration: 0.5,
+                                        ease: [0.25, 0.1, 0.25, 1],
+                                        delay: 0.6 + i * 0.1,
+                                    }}
+                                >
+                                    {word}
+                                </motion.span>
+                            ),
+                        )}
+                    </div>
+                </motion.div>
+
+                {/* === Skill Marquee — full viewport width, seamless loop === */}
+                <motion.div
+                    className="overflow-hidden border-y border-on-surface/[0.06] py-3 my-6 lg:my-8"
+                    variants={fadeUp}
+                >
+                    <div className="flex w-max animate-marquee">
+                        <div className="flex">{marqueeContent}</div>
+                        <div className="flex">{marqueeContent}</div>
+                    </div>
+                </motion.div>
+
+                {/* === Bottom: Status/Bio + CTA/Socials/Time === */}
+                <motion.div
+                    className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 px-8 lg:px-28"
+                    variants={fadeUp}
+                >
+                    <div>
+                        {/* Mobile role label */}
+                        <p className="lg:hidden text-xs tracking-[0.25em] text-accent mb-2">
+                            FULL-STACK SOFTWARE ENGINEER
+                        </p>
+                        {/* Availability */}
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[0.65rem] tracking-[0.25em] text-on-surface/40 uppercase">
+                                Available for work
+                            </span>
+                        </div>
+                        <p className="text-base lg:text-lg leading-relaxed max-w-md text-on-surface/60">
+                            Full-stack software engineer based in India,
+                            specializing in{" "}
+                            <span className="text-on-accent bg-accent/90 px-1.5">
+                                Blockchain
+                            </span>{" "}
+                            and decentralized applications.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col lg:items-end gap-4 flex-shrink-0">
+                        <div className="flex items-center gap-5 flex-col sm:flex-row">
+                            <ShinyButton
+                                text="Visit My GitHub"
+                                githubUrl="https://github.com/eik-1"
+                            />
+                            <div className="flex gap-3">
+                                <Link
+                                    href="https://x.com/0xeik"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-10 h-10 text-on-surface transition-colors duration-300 hover:text-accent"
+                                >
+                                    <Image
+                                        className="w-5 h-5"
+                                        src={X}
+                                        alt="X"
+                                    />
+                                </Link>
+                                <Link
+                                    href="https://www.linkedin.com/in/sarthakeik1/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-10 h-10 text-on-surface transition-colors duration-300 hover:text-accent"
+                                >
+                                    <Linkedin size={24} />
+                                </Link>
+                                <Link
+                                    href="https://medium.com/@sarthakrawatbiz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-10 h-10 text-on-surface transition-colors duration-300 hover:text-accent"
+                                >
+                                    <Image
+                                        className="w-7 h-7"
+                                        src={medium}
+                                        alt="medium"
+                                    />
+                                </Link>
+                            </div>
+                        </div>
+                        {/* Location + Live Time */}
+                        {time && (
+                            <span className="text-[0.65rem] tracking-[0.25em] text-on-surface/30 uppercase">
+                                India · IST {time}
+                            </span>
+                        )}
+                    </div>
+                </motion.div>
+            </motion.div>
+
+            {/* Commented out: Ethereum 3D Model */}
+            {/* <div className="w-full lg:w-2/5 h-[600px] bg-transparent hidden lg:block">
+                <Canvas>
+                    <ambientLight />
+                    <OrbitControls
+                        enableZoom={false}
+                        enablePan={false}
+                        enableRotate={true}
+                        enableDamping={true}
+                        dampingFactor={0.25}
+                        rotateSpeed={0.5}
+                    />
+                    <Suspense fallback={null}>
+                        <Ethereum />
+                    </Suspense>
+                    <Environment preset="sunset" />
+                </Canvas>
+            </div> */}
         </section>
     )
 }

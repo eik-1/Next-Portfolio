@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 243 244 246;
+        --foreground: 10 10 10;
+        --accent: 239 68 68;
+        --surface: 243 244 246;
+        --on-surface: 10 10 10;
+        --on-accent: 243 244 246;
+        --muted: 107 114 128;
+        --muted-light: 156 163 175;
+        --border: 209 213 219;
+        --tooltip-bg: 10 10 10;
+        --tooltip-text: 229 231 235;
+
+        --page-px: 2rem;
+        --page-px-lg: 7rem;
+        --nav-height: 4.5rem;
+        --section-gap: 5rem;
+    }
+
+    @media (min-width: 1024px) {
+        :root {
+            --nav-height: 4rem;
+        }
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    ::selection {
+        background-color: rgb(var(--accent));
+        color: rgb(var(--on-accent));
+    }
+
+    :focus-visible {
+        outline: 2px solid rgb(var(--accent));
+        outline-offset: 2px;
+    }
+}
