@@ -23,7 +23,7 @@ function ProjectCard({ project }) {
     return (
         <div className="projectCard group">
             <motion.div
-                className="relative rounded-lg overflow-hidden aspect-[5/3] shadow-lg"
+                className="relative rounded-2xl overflow-hidden aspect-[5/3] shadow-lg border border-accent/10 hover:border-accent/25 transition-colors duration-300"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 onMouseMove={handleMouseMove}
