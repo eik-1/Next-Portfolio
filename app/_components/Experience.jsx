@@ -10,7 +10,7 @@ const EXPERIENCES = [
         role: "Full Stack Engineer",
         company: "Capx AI",
         logo: "/capx_logo.jpg",
-        period: "May 2025 · Present",
+        period: "August 2025 - May 2026",
         bullets: [
             "Led backend development for the Capx Super App mainnet launch, architecting core platform APIs in TypeScript/Express with Node.js clustering across trading, governance, airdrop, and affiliate domains.",
             "Managed 50+ PostgreSQL tables, 100+ SQL functions, and 10+ microservices. Architected a Supabase Postgres read replica strategy to offload 80% read traffic.",
