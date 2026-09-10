@@ -120,7 +120,7 @@ function Navbar() {
                         ))}
                         <div className="w-px h-4 bg-on-surface/10" />
                         <motion.a
-                            href="https://drive.google.com/file/d/1TdSomZpwzSI3LxKc531xYiV5G5TGeklU/view"
+                            href="https://drive.google.com/file/d/1nBwgSy7LkLnY1XeMiXntuWTsVYoEB1Ug/view?usp=sharing"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="relative overflow-hidden inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[0.8rem] tracking-[0.15em] text-on-surface no-underline border border-on-surface/15 group"
@@ -224,7 +224,7 @@ function Navbar() {
                                 className="mt-4"
                             >
                                 <motion.a
-                                    href="https://drive.google.com/file/d/1TdSomZpwzSI3LxKc531xYiV5G5TGeklU/view"
+                                    href="https://drive.google.com/file/d/1nBwgSy7LkLnY1XeMiXntuWTsVYoEB1Ug/view?usp=sharing"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-full text-base tracking-[0.15em] text-on-surface no-underline border border-on-surface/20 group"
