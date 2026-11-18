@@ -1,44 +1,258 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-    :root {
-        --background: 243 244 246;
-        --foreground: 10 10 10;
-        --accent: 239 68 68;
-        --surface: 243 244 246;
-        --on-surface: 10 10 10;
-        --on-accent: 243 244 246;
-        --muted: 107 114 128;
-        --muted-light: 156 163 175;
-        --border: 209 213 219;
-        --tooltip-bg: 10 10 10;
-        --tooltip-text: 229 231 235;
+/* ─────────────────────────────────────────────────────────────
+   eik v3 tokens: "paper and pixels". Source of truth: DESIGN.md
+   Quiet paper, ink, one red. No gradients, no textures, no glows.
+   ───────────────────────────────────────────────────────────── */
 
-        --page-px: 2rem;
-        --page-px-lg: 7rem;
-        --nav-height: 4.5rem;
-        --section-gap: 5rem;
-    }
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-    @media (min-width: 1024px) {
-        :root {
-            --nav-height: 4rem;
+:root {
+    --paper: #fbfbf9; /* page */
+    --tile: #f2f2ef; /* soft tiles that hold objects (widgets, toys, covers) */
+    --tile-2: #e9e9e5; /* pressed / nested */
+    --line: rgb(26 26 24 / 0.09); /* dividers */
+    --line-2: rgb(26 26 24 / 0.18); /* control borders */
+    --ink: #1a1a18; /* text · 16.9:1 */
+    --soft: #64635d; /* secondary text · 6.0:1 */
+    --faint: #6d6c66; /* captions, pixel data · 5.1:1 on paper, 4.7:1 on tile */
+    --red: #e5392e; /* the one accent: small marks, live states, hover ink */
+    --on-red: #ffffff;
+    --live: #2f9e5b;
+    --shadow-pop:
+        0 1px 2px rgb(26 26 24 / 0.06), 0 14px 32px -16px rgb(26 26 24 / 0.28);
+    color-scheme: light;
+}
+
+:root[data-theme="dark"],
+[data-theme="dark"] {
+    --paper: #121211;
+    --tile: #1b1b19;
+    --tile-2: #242422;
+    --line: rgb(236 235 230 / 0.09);
+    --line-2: rgb(236 235 230 / 0.18);
+    --ink: #ecebe6;
+    --soft: #a3a29b;
+    --faint: #8f8e88; /* 5.7:1 on paper, 5.3:1 on tile */
+    --red: #ff5a4e;
+    --on-red: #121211;
+    --live: #5cc98a;
+    --shadow-pop:
+        0 1px 2px rgb(0 0 0 / 0.4), 0 14px 32px -12px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+}
+
+[data-theme="dark"]:not(:root) {
+    background-color: var(--paper);
+    color: var(--ink);
+}
+
+@theme inline {
+    --color-paper: var(--paper);
+    --color-tile: var(--tile);
+    --color-tile-2: var(--tile-2);
+    --color-line: var(--line);
+    --color-line-2: var(--line-2);
+    --color-ink: var(--ink);
+    --color-soft: var(--soft);
+    --color-faint: var(--faint);
+    --color-red: var(--red);
+    --color-on-red: var(--on-red);
+    --color-live: var(--live);
+
+    --font-serif: var(--font-serif-face), Georgia, serif;
+    --font-sans: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+    --font-pixel: var(--font-pixel-face), ui-monospace, monospace;
+
+    --shadow-pop: var(--shadow-pop);
+}
+
+@theme {
+    /* Type. Serif sizes carry the voice; sans/pixel sizes stay small. */
+    --text-pixel: 0.6875rem; /* 11px, Departure Mono is drawn on an 11px grid */
+    --text-pixel--line-height: 1rem;
+    --text-ui: 0.8125rem; /* 13px sans UI */
+    --text-ui--line-height: 1.25rem;
+    --text-small: 0.9375rem; /* 15px serif captions */
+    --text-small--line-height: 1.5rem;
+    --text-read: 1.0625rem; /* 17px serif body */
+    --text-read--line-height: 1.7rem;
+    --text-intro: 1.3125rem; /* 21px serif intro */
+    --text-intro--line-height: 2rem;
+    --text-title: 1.75rem; /* 28px serif page titles */
+    --text-title--line-height: 2.125rem;
+    --text-name: clamp(2.25rem, 5vw, 3.25rem);
+    --text-name--line-height: 1.05;
+
+    --tracking-tight: -0.015em;
+    --tracking-name: -0.025em;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --duration-press: 90ms;
+    --duration-quick: 160ms;
+    --duration-base: 240ms;
+    --duration-slow: 420ms;
+
+    --animate-blink: blink 1.2s steps(2, start) infinite;
+    --animate-pixel-pulse: pixel-pulse 2.4s steps(1, end) infinite;
+    --animate-eq: eq 1s ease-in-out infinite;
+    --animate-spin-slow: spin 4s linear infinite;
+    --animate-record-glint: record-glint 1.6s steps(1, end) infinite;
+
+    /* the header record's glint: on for a quarter of the turn, then the next one */
+    @keyframes record-glint {
+        0%,
+        24.9% {
+            opacity: 1;
+        }
+        25%,
+        100% {
+            opacity: 0;
         }
     }
 
+    @keyframes blink {
+        to {
+            visibility: hidden;
+        }
+    }
+    /* a ring that steps out a pixel at a time and fades, then rests: no smooth tween */
+    @keyframes pixel-pulse {
+        0% {
+            box-shadow:
+                0 0 0 2px var(--paper),
+                0 0 0 3px color-mix(in srgb, var(--live) 75%, transparent);
+        }
+        12% {
+            box-shadow:
+                0 0 0 4px var(--paper),
+                0 0 0 5px color-mix(in srgb, var(--live) 50%, transparent);
+        }
+        24% {
+            box-shadow:
+                0 0 0 6px var(--paper),
+                0 0 0 7px color-mix(in srgb, var(--live) 25%, transparent);
+        }
+        36%,
+        100% {
+            box-shadow: none;
+        }
+    }
+    @keyframes eq {
+        0%,
+        100% {
+            transform: scaleY(0.3);
+        }
+        50% {
+            transform: scaleY(1);
+        }
+    }
+}
+
+@layer base {
     html {
-        scroll-behavior: smooth;
+        background: var(--paper);
+        color: var(--ink);
+        -webkit-text-size-adjust: 100%;
     }
-
+    body {
+        @apply font-serif text-read antialiased;
+        background: var(--paper);
+        font-optical-sizing: auto;
+        transition:
+            background-color var(--duration-slow) var(--ease-standard),
+            color var(--duration-slow) var(--ease-standard);
+    }
     ::selection {
-        background-color: rgb(var(--accent));
-        color: rgb(var(--on-accent));
+        background-color: var(--red);
+        color: var(--on-red);
+    }
+    :focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+    button {
+        cursor: pointer;
+    }
+    img {
+        -webkit-user-drag: none;
+    }
+    .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+    }
+}
+
+@layer components {
+    /* Page column. Text never runs wider than this. */
+    .col {
+        @apply mx-auto w-full max-w-[640px] px-5;
+    }
+    .col-wide {
+        @apply mx-auto w-full max-w-[1040px] px-5;
     }
 
-    :focus-visible {
-        outline: 2px solid rgb(var(--accent));
-        outline-offset: 2px;
+    /* Small sans label. Use sparingly: section names, captions. */
+    .label {
+        @apply font-sans text-ui text-soft;
+    }
+
+    /* Inline text link: ink, thin underline that thickens on hover. */
+    .ink-link {
+        text-decoration-line: underline;
+        text-decoration-color: var(--line-2);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.2em;
+        transition:
+            text-decoration-color var(--duration-quick) var(--ease-standard),
+            color var(--duration-quick) var(--ease-standard);
+    }
+    .ink-link:hover {
+        text-decoration-color: currentColor;
+    }
+
+    /* 1-bit images stay crisp; invert in dark so ink stays ink. */
+    .bitmap {
+        image-rendering: pixelated;
+    }
+    [data-theme="dark"] .bitmap {
+        filter: invert(1) hue-rotate(180deg) brightness(0.93);
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+    .text-pretty {
+        text-wrap: pretty;
+    }
+    .no-scrollbar {
+        scrollbar-width: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

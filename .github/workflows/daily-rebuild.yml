@@ -1,0 +1,14 @@
+# Redeploys the site once a day so the GitHub activity and npm numbers stay fresh.
+# Needs one repo secret: DEPLOY_HOOK_URL (your host's deploy hook URL).
+name: Daily rebuild
+
+on:
+    schedule:
+        - cron: "30 0 * * *" # 06:00 IST every day
+    workflow_dispatch: # adds a "Run workflow" button on the Actions tab
+
+jobs:
+    rebuild:
+        runs-on: ubuntu-latest
+        steps:
+            - run: curl -fsS -X POST "${{ secrets.DEPLOY_HOOK_URL }}"
