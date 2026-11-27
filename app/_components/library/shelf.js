@@ -1,3 +1,4 @@
+import covers from "@/app/_data/covers.json"
 import { books } from "@/app/_data/library"
 
 /**
@@ -101,7 +102,15 @@ const order = { reading: 0, read: 1 }
 
 /** Every book with its measurements, the ones being read first. */
 export const SHELF = books
-    .map((book) => ({ ...book, seed: hash(book.id), ...measure(book) }))
+    .map((book) => ({
+        ...book,
+        seed: hash(book.id),
+        // the real cover, if there is one in public/books (see _data/covers.json)
+        cover: covers[book.id]
+            ? { src: `/books/${book.id}.webp`, ...covers[book.id] }
+            : null,
+        ...measure(book),
+    }))
     .sort((a, b) => order[a.status] - order[b.status])
 
 export const READING = SHELF.filter((b) => b.status === "reading").length
@@ -115,9 +124,40 @@ export const THEMES = books.reduce(
 export const TALLEST = Math.max(...SHELF.map((b) => b.height))
 const WIDEST = Math.max(...SHELF.map((b) => b.width))
 
+/** The plank each row of books stands on, in units. */
+export const PLANK = 7
+
+/**
+ * The last book on the shelf leans on the one before it. It pivots on its
+ * bottom-left corner, so it rests against the neighbour's top corner (or,
+ * if the neighbour is the taller one, against its side), and stands this far
+ * off it at the foot.
+ */
+export const LEAN_DEG = 9
+const lean = (() => {
+    const [prev, last] = SHELF.slice(-2)
+    if (!prev || !last) return null
+    const rad = (LEAN_DEG * Math.PI) / 180
+    const touch = Math.min(prev.height, last.height * Math.cos(rad))
+    return {
+        id: last.id,
+        after: prev.id,
+        gap: Math.round(touch * Math.tan(rad)),
+    }
+})()
+export const LEAN = lean
+
+/** The candle standing at the end of the shelf: its width in units. */
+export const CANDLE = 26
+
 /** Units a container must offer for the whole shelf to stand in one row. */
 export const ROW_UNITS =
-    SHELF.reduce((sum, b) => sum + b.width, 0) + (SHELF.length - 1) * GAP + 2
+    SHELF.reduce((sum, b) => sum + b.width, 0) +
+    (SHELF.length - 1) * GAP +
+    (LEAN ? LEAN.gap : 0) +
+    GAP * 2 +
+    CANDLE +
+    2
 
 /** The same for two rows: half the shelf, plus the one book that may not fit the first row. */
 export const HALF_UNITS = Math.ceil((ROW_UNITS + WIDEST + GAP) / 2) + 2

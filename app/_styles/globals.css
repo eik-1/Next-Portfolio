@@ -105,6 +105,19 @@
     --animate-eq: eq 1s ease-in-out infinite;
     --animate-spin-slow: spin 4s linear infinite;
     --animate-record-glint: record-glint 1.6s steps(1, end) infinite;
+    --animate-wisp: wisp 1.3s steps(6, end) forwards;
+
+    /* the shelf candle's smoke when it's blown out: rises a pixel row at a time and thins away */
+    @keyframes wisp {
+        from {
+            transform: translateY(0);
+            opacity: 0.9;
+        }
+        to {
+            transform: translateY(-12px);
+            opacity: 0;
+        }
+    }
 
     /* the header record's glint: on for a quarter of the turn, then the next one */
     @keyframes record-glint {
@@ -243,6 +256,60 @@
     }
     .no-scrollbar::-webkit-scrollbar {
         display: none;
+    }
+
+    /* The wordmark's flame: three stacked pixel frames, one shown at a time.
+       Stepped (no tweening) so the pixels stay crisp, on an uneven rhythm so
+       it reads as a flicker, not a blink. Reduced motion leaves frame 0.
+       Timeline: 0 rest · 34 lean · 40 rest · 52 lean · 60 rest · 78 duck · 84 rest */
+    .eik-flame > path:not(:first-child) {
+        opacity: 0;
+    }
+    .eik-flame > path:nth-child(1) {
+        animation: eik-flame-0 2.6s steps(1, end) infinite;
+    }
+    .eik-flame > path:nth-child(2) {
+        animation: eik-flame-1 2.6s steps(1, end) infinite;
+    }
+    .eik-flame > path:nth-child(3) {
+        animation: eik-flame-2 2.6s steps(1, end) infinite;
+    }
+}
+
+@keyframes eik-flame-0 {
+    0%,
+    40%,
+    60%,
+    84%,
+    100% {
+        opacity: 1;
+    }
+    34%,
+    52%,
+    78% {
+        opacity: 0;
+    }
+}
+@keyframes eik-flame-1 {
+    0%,
+    40%,
+    60%,
+    100% {
+        opacity: 0;
+    }
+    34%,
+    52% {
+        opacity: 1;
+    }
+}
+@keyframes eik-flame-2 {
+    0%,
+    84%,
+    100% {
+        opacity: 0;
+    }
+    78% {
+        opacity: 1;
     }
 }
 

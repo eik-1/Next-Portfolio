@@ -76,12 +76,18 @@ export default function Chip({
         document.addEventListener("pointerdown", onDown)
         document.addEventListener("keydown", onKey)
         document.addEventListener(OPENED, onOther)
-        window.addEventListener("resize", close)
+        // Close when the width changes (the card's place goes stale), but not
+        // on the height-only resizes phones fire while scrolling.
+        const width = document.documentElement.clientWidth
+        const onResize = () => {
+            if (document.documentElement.clientWidth !== width) close()
+        }
+        window.addEventListener("resize", onResize)
         return () => {
             document.removeEventListener("pointerdown", onDown)
             document.removeEventListener("keydown", onKey)
             document.removeEventListener(OPENED, onOther)
-            window.removeEventListener("resize", close)
+            window.removeEventListener("resize", onResize)
         }
     }, [open, id])
 

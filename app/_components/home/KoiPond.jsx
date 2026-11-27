@@ -83,6 +83,7 @@ export default function KoiPond() {
         let last = 0
         let seen = false
         let obstacles = []
+        let pad = PAD
         let fish = []
         let pads = []
         const ripples = []
@@ -107,13 +108,13 @@ export default function KoiPond() {
         }
 
         // ---- layout ---------------------------------------------------
-        const inObstacle = (x, y, pad = 0) =>
+        const inObstacle = (x, y, m = 0) =>
             obstacles.some(
                 (o) =>
-                    x > o.x0 - pad &&
-                    x < o.x1 + pad &&
-                    y > o.y0 - pad &&
-                    y < o.y1 + pad,
+                    x > o.x0 - m &&
+                    x < o.x1 + m &&
+                    y > o.y0 - m &&
+                    y < o.y1 + m,
             )
 
         const openSpot = (margin) => {
@@ -128,7 +129,7 @@ export default function KoiPond() {
         const makeFish = (i, narrow) => {
             const kind = KINDS[i % KINDS.length]
             const len = narrow
-                ? 20 + Math.random() * 8
+                ? 16 + Math.random() * 6
                 : 28 + Math.random() * 14
             const at = openSpot(6)
             const a = Math.random() * Math.PI * 2
@@ -154,10 +155,18 @@ export default function KoiPond() {
             }
         }
 
+        let lastW = 0
+        let lastH = 0
         const layout = () => {
             const sr = section.getBoundingClientRect()
             const W = document.documentElement.clientWidth
             const H = section.offsetHeight + BELOW
+            // Phones fire `resize` while scrolling (the address bar comes and
+            // goes) without the pond changing size: keep everything as it is.
+            if (W === lastW && H === lastH) return false
+            const widthChanged = W !== lastW
+            lastW = W
+            lastH = H
             el.style.left = `${-sr.left}px`
             el.style.width = `${W}px`
             el.style.height = `${H}px`
@@ -169,27 +178,31 @@ export default function KoiPond() {
             cols = Math.ceil(W / CELL)
             rows = Math.ceil(H / CELL)
 
+            const narrow = W < 640
+            pad = narrow ? 5 : PAD // phones have little open water: hug the islands closer
             const cr = el.getBoundingClientRect()
             obstacles = [...section.querySelectorAll("[data-pond-avoid]")].map(
                 (n) => {
                     const r = n.getBoundingClientRect()
                     return {
-                        x0: (r.left - cr.left) / CELL - PAD,
-                        y0: (r.top - cr.top) / CELL - PAD,
-                        x1: (r.right - cr.left) / CELL + PAD,
-                        y1: (r.bottom - cr.top) / CELL + PAD,
+                        x0: (r.left - cr.left) / CELL - pad,
+                        y0: (r.top - cr.top) / CELL - pad,
+                        x1: (r.right - cr.left) / CELL + pad,
+                        y1: (r.bottom - cr.top) / CELL + pad,
                     }
                 },
             )
 
-            const narrow = W < 640
             if (fresh || fish.length !== (narrow ? 3 : 5))
                 fish = Array.from({ length: narrow ? 3 : 5 }, (_, i) =>
                     makeFish(i, narrow),
                 )
+            // Lily pads stay put unless the width changed or one now sits on an island.
+            const stranded = pads.some((p) => inObstacle(p.x, p.y, p.r))
+            if (!widthChanged && !stranded && pads.length) return true
             pads = []
             for (let n = 0; n < (narrow ? 2 : 4); n++) {
-                const r = narrow ? 7 + Math.random() * 3 : 9 + Math.random() * 5
+                const r = narrow ? 5 + Math.random() * 2 : 9 + Math.random() * 5
                 for (let tries = 0; tries < 60; tries++) {
                     const p = openSpot(r + 2)
                     if (
@@ -208,6 +221,7 @@ export default function KoiPond() {
                     }
                 }
             }
+            return true
         }
 
         // ---- behaviour ------------------------------------------------
@@ -655,19 +669,42 @@ export default function KoiPond() {
             if (
                 !reduced &&
                 now - pointer.ripple > 350 &&
-                !inObstacle(p.x, p.y, -PAD + 2)
+                !inObstacle(p.x, p.y, -pad + 2)
             ) {
                 pointer.ripple = now
                 ripples.push({ x: p.x, y: p.y, r: 1, max: 9, rings: 1 })
             }
         }
-        // a finished primary click or tap: never a scroll swipe or a right-click
+        // A finished primary click or tap: never a scroll swipe or a right-click.
+        // Taps are read from pointerdown/up rather than `click`, because iOS
+        // Safari never sends a click for a tap on plain, non-clickable page.
+        const press = { id: null, x: 0, y: 0, at: 0 }
+        const onDown = (e) => {
+            if (!e.isPrimary || e.button !== 0) return
+            press.id = e.pointerId
+            press.x = e.clientX
+            press.y = e.clientY
+            press.at = performance.now()
+        }
+        const onCancel = (e) => {
+            if (e.pointerId === press.id) press.id = null
+        }
+        const onUp = (e) => {
+            if (e.pointerId !== press.id) return
+            press.id = null
+            const moved = Math.hypot(e.clientX - press.x, e.clientY - press.y)
+            if (moved > 10 || performance.now() - press.at > 600) return
+            onTap(e)
+        }
         const onTap = (e) => {
-            if (e.button !== 0) return
             if (reduced) return
             const p = local(e)
-            if (!p.inside || inObstacle(p.x, p.y, -PAD + 2)) return
-            if (e.target.closest("a, button, input, textarea, nav, header"))
+            if (!p.inside || inObstacle(p.x, p.y, -pad + 2)) return
+            if (
+                e.target.closest?.(
+                    "a, button, input, textarea, nav, header, [role='dialog'], [data-pond-avoid]",
+                )
+            )
                 return
             ripples.push({ x: p.x, y: p.y, r: 1, max: 14, rings: 2 })
             const n = 2 + Math.floor(Math.random() * 2)
@@ -687,16 +724,10 @@ export default function KoiPond() {
         }
         draw()
 
-        const ro = new ResizeObserver(() => {
-            layout()
-            draw()
-        })
+        const ro = new ResizeObserver(() => layout() && draw())
         ro.observe(section)
         // the viewport can change without the hero changing (it stops at 1040px)
-        const onResize = () => {
-            layout()
-            draw()
-        }
+        const onResize = () => layout() && draw()
         window.addEventListener("resize", onResize)
         const io = new IntersectionObserver(([e]) => {
             seen = e.isIntersecting
@@ -710,7 +741,9 @@ export default function KoiPond() {
         mo.observe(document.documentElement, { attributes: true })
         document.addEventListener("visibilitychange", run)
         window.addEventListener("pointermove", onMove, { passive: true })
-        window.addEventListener("click", onTap)
+        window.addEventListener("pointerdown", onDown, { passive: true })
+        window.addEventListener("pointerup", onUp, { passive: true })
+        window.addEventListener("pointercancel", onCancel, { passive: true })
 
         return () => {
             cancelAnimationFrame(raf)
@@ -719,7 +752,9 @@ export default function KoiPond() {
             mo.disconnect()
             document.removeEventListener("visibilitychange", run)
             window.removeEventListener("pointermove", onMove)
-            window.removeEventListener("click", onTap)
+            window.removeEventListener("pointerdown", onDown)
+            window.removeEventListener("pointerup", onUp)
+            window.removeEventListener("pointercancel", onCancel)
             window.removeEventListener("resize", onResize)
         }
     }, [reduced])

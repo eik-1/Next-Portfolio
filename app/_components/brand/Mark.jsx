@@ -1,9 +1,10 @@
 import { cn } from "@/app/_lib/cn"
 
 import { EIK } from "./eik-geometry"
+import Flame from "./Flame"
 
 /**
- * The eik wordmark (v3): Newsreader letterforms with a red pixel for the i's dot.
+ * The eik wordmark (v3): Newsreader letterforms with a small red pixel flame for the i's dot.
  * Size it with a height class (e.g. "h-5"); width follows. Ink = currentColor.
  */
 export default function Mark({ className, title = "eik" }) {
@@ -19,13 +20,7 @@ export default function Mark({ className, title = "eik" }) {
                 <path d={EIK.e} />
                 <path transform={`translate(${EIK.iX} 0)`} d={EIK.i} />
                 <path transform={`translate(${EIK.kX} 0)`} d={EIK.k} />
-                <rect
-                    x={EIK.pixel.x}
-                    y={EIK.pixel.y}
-                    width={EIK.pixel.size}
-                    height={EIK.pixel.size}
-                    fill="var(--red)"
-                />
+                <Flame />
             </g>
         </svg>
     )
