@@ -32,13 +32,28 @@ export default function SkillsBoard({ groups, usage }) {
                                     <li key={n}>
                                         <button
                                             type="button"
-                                            onPointerEnter={() =>
-                                                used && setSkill(n)
+                                            onPointerEnter={(e) =>
+                                                e.pointerType === "mouse" &&
+                                                used &&
+                                                setSkill(n)
                                             }
-                                            onPointerLeave={() =>
+                                            onPointerLeave={(e) =>
+                                                e.pointerType === "mouse" &&
                                                 setSkill(null)
                                             }
-                                            onFocus={() => used && setSkill(n)}
+                                            // touch has no hover: a tap pins the skill, a second tap lets go
+                                            onPointerUp={(e) =>
+                                                e.pointerType !== "mouse" &&
+                                                used &&
+                                                setSkill(skill === n ? null : n)
+                                            }
+                                            onFocus={(e) =>
+                                                used &&
+                                                e.currentTarget.matches(
+                                                    ":focus-visible",
+                                                ) &&
+                                                setSkill(n)
+                                            }
                                             onBlur={() => setSkill(null)}
                                             aria-label={
                                                 used

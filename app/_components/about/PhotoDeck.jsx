@@ -6,7 +6,7 @@ import portrait from "@/public/me/portrait.webp"
 
 /**
  * The about-page photos: two (max three) prints laid slightly askew, the way
- * you'd put them on a desk. Hover straightens one and lifts it.
+ * you'd put them on a desk. Hover (or press, on touch) straightens one and lifts it.
  * Add a third by appending to PHOTOS.
  */
 const PHOTOS = [
@@ -26,7 +26,7 @@ export default function PhotoDeck() {
                 <figure
                     key={p.id}
                     className={cn(
-                        "group transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out)] hover:z-10 hover:rotate-0 hover:-translate-y-1",
+                        "group transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out)] hover:z-10 hover:rotate-0 hover:-translate-y-1 active:z-10 active:rotate-0 active:-translate-y-1",
                         p.tilt,
                     )}
                 >

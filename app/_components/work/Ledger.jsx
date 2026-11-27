@@ -35,8 +35,13 @@ function Stack({ items }) {
     return (
         <ul
             className="flex flex-wrap gap-1.5"
-            onPointerEnter={() => setStack(items)}
-            onPointerLeave={() => setStack(null)}
+            onPointerEnter={(e) => e.pointerType === "mouse" && setStack(items)}
+            onPointerLeave={(e) => e.pointerType === "mouse" && setStack(null)}
+            // touch: a tap lights this stack's skills, a second tap clears them
+            onPointerUp={(e) =>
+                e.pointerType !== "mouse" &&
+                setStack((s) => (s === items ? null : items))
+            }
         >
             {items.map((s) => (
                 <li

@@ -25,21 +25,42 @@ export default function Bitmap({
     develop = false,
 }) {
     const ref = useRef(null)
+    const touched = useRef(false) // colour shown by a tap (touch has no hover)
 
-    const move = (e) => {
-        if (reveal !== "circle" || e.pointerType !== "mouse") return
+    const aim = (e) => {
         const r = ref.current.getBoundingClientRect()
         ref.current.style.setProperty("--x", `${e.clientX - r.left}px`)
         ref.current.style.setProperty("--y", `${e.clientY - r.top}px`)
+        return r
+    }
+    const move = (e) => {
+        if (reveal !== "circle" || e.pointerType !== "mouse") return
+        aim(e)
         ref.current.style.setProperty("--r", `${radius}px`)
     }
-    const leave = () => ref.current?.style.setProperty("--r", "0px")
+    const leave = (e) => {
+        if (e.pointerType !== "mouse") return
+        ref.current?.style.setProperty("--r", "0px")
+    }
+    // A tap floods the colour out from the finger; another tap takes it back.
+    const tap = (e) => {
+        if (reveal !== "circle" || e.pointerType === "mouse") return
+        touched.current = !touched.current
+        const r = aim(e)
+        ref.current.style.setProperty(
+            "--r",
+            touched.current
+                ? `${Math.ceil(Math.hypot(r.width, r.height))}px`
+                : "0px",
+        )
+    }
 
     return (
         <div
             ref={ref}
             onPointerMove={move}
             onPointerLeave={leave}
+            onPointerUp={tap}
             className={cn(
                 "group/bitmap relative isolate overflow-hidden bg-paper",
                 className,

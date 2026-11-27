@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 
+import covers from "@/app/_data/covers.json"
 import { appleMusic, records } from "@/app/_data/library"
 import { site } from "@/app/_data/site"
 import { cn } from "@/app/_lib/cn"
@@ -83,8 +84,9 @@ function BookGlyph() {
     )
 }
 
-/** A small hardback: ink cover, page block showing along the top and fore-edge, red ribbon out the bottom. */
-function BookCover({ title }) {
+/** A small hardback: its real cover (or ink with the title set on it), page block showing along the top and fore-edge, red ribbon out the bottom. */
+function BookCover({ id, title }) {
+    const cover = covers[id]
     return (
         <span
             aria-hidden="true"
@@ -94,11 +96,22 @@ function BookCover({ title }) {
             <span className="absolute left-full top-0 h-full w-[6px] origin-top-left -skew-y-[45deg] border border-line-2 bg-paper" />
             <span className="absolute left-[38px] top-full h-[11px] w-[5px] bg-red [clip-path:polygon(0_0,100%_0,100%_100%,50%_70%,0_100%)]" />
             <span className="absolute inset-0 overflow-hidden rounded-[1px_2px_2px_1px] bg-ink">
-                <span className="absolute inset-y-0 left-[5px] w-px bg-paper/25" />
-                <span className="absolute left-[10px] right-[4px] top-[12px] line-clamp-4 font-serif text-[9px] leading-[11px] text-paper">
-                    {title}
-                </span>
-                <span className="absolute bottom-[10px] left-[10px] h-px w-[10px] bg-paper/50" />
+                {cover ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- static export
+                    <img
+                        src={`/books/${id}.webp`}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover"
+                    />
+                ) : (
+                    <>
+                        <span className="absolute left-[10px] right-[4px] top-[12px] line-clamp-4 font-serif text-[9px] leading-[11px] text-paper">
+                            {title}
+                        </span>
+                        <span className="absolute bottom-[10px] left-[10px] h-px w-[10px] bg-paper/50" />
+                    </>
+                )}
+                <span className="absolute inset-y-0 left-[5px] w-px bg-black/25" />
             </span>
         </span>
     )
@@ -121,7 +134,7 @@ export function ReadingChip({ className }) {
             height={136}
             popover={
                 <span className="flex items-start gap-4">
-                    <BookCover title={book.title} />
+                    <BookCover id={book.id} title={book.title} />
                     <span className="block min-w-0 pt-1">
                         <span className="block font-serif text-small italic leading-[1.3] text-ink">
                             {book.title}

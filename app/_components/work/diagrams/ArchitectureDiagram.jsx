@@ -387,8 +387,21 @@ export default function ArchitectureDiagram({ name, className }) {
                                 return (
                                     <g
                                         key={n.id}
-                                        onPointerEnter={() => setHover(n.id)}
-                                        onPointerLeave={() => setHover(null)}
+                                        onPointerEnter={(e) =>
+                                            e.pointerType === "mouse" &&
+                                            setHover(n.id)
+                                        }
+                                        onPointerLeave={(e) =>
+                                            e.pointerType === "mouse" &&
+                                            setHover(null)
+                                        }
+                                        // touch: tap a box for its job, tap again to put it away
+                                        onPointerUp={(e) =>
+                                            e.pointerType !== "mouse" &&
+                                            setHover((h) =>
+                                                h === n.id ? null : n.id,
+                                            )
+                                        }
                                         style={{
                                             opacity: dim ? 0.45 : 1,
                                             transition:

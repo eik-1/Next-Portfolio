@@ -36,6 +36,37 @@ const STILL = { scrim: quick, print: quick, panel: quick }
 const textButton =
     "-my-2 py-2 font-sans text-ui text-soft transition-colors duration-[var(--duration-quick)] hover:text-ink disabled:pointer-events-none disabled:text-faint"
 
+/**
+ * The book's real cover, printed onto the cloth once it lands. A hairline
+ * crease near the spine edge makes it read as a bound book, not a picture.
+ */
+function RealCover({ book, titleId }) {
+    return (
+        <div className="absolute inset-0 overflow-hidden rounded-sm">
+            <h2 id={titleId} className="sr-only">
+                {book.title}
+            </h2>
+            {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+            <img
+                src={book.cover.src}
+                width={book.cover.w}
+                height={book.cover.h}
+                alt=""
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+            />
+            <span
+                aria-hidden
+                className="absolute inset-y-0 left-[5%] w-px bg-black/25"
+            />
+            <span
+                aria-hidden
+                className="absolute inset-y-0 left-[calc(5%+1px)] w-px bg-white/20"
+            />
+        </div>
+    )
+}
+
 const onScreen = (r) =>
     r &&
     r.width > 0 &&
@@ -163,7 +194,14 @@ export default function BookDetail({
 
             <div className="pointer-events-none relative mx-auto flex min-h-full w-full max-w-[820px] items-center px-5 py-20">
                 <div className="grid w-full gap-8 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-12 md:gap-16">
-                    <div className="pointer-events-auto relative aspect-[2/3] w-36 sm:w-48 md:w-56">
+                    <div
+                        className="pointer-events-auto relative w-36 sm:w-48 md:w-56"
+                        style={{
+                            aspectRatio: book.cover
+                                ? `${book.cover.w} / ${book.cover.h}`
+                                : "2 / 3",
+                        }}
+                    >
                         <motion.div
                             aria-hidden
                             variants={v.print}
@@ -181,7 +219,11 @@ export default function BookDetail({
                             variants={v.print}
                             className="absolute inset-0"
                         >
-                            <BookCover book={book} titleId={titleId} />
+                            {book.cover ? (
+                                <RealCover book={book} titleId={titleId} />
+                            ) : (
+                                <BookCover book={book} titleId={titleId} />
+                            )}
                         </motion.div>
                     </div>
 

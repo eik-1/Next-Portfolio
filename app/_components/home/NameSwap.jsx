@@ -4,6 +4,7 @@ import { motion } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 
 import { EIK } from "@/app/_components/brand/eik-geometry"
+import Flame from "@/app/_components/brand/Flame"
 import { ease } from "@/app/_lib/motion"
 import { useReducedMotion } from "@/app/_lib/useReducedMotion"
 
@@ -28,7 +29,7 @@ const GLYPHS = [
 /**
  * "Sarthak" in the hero. Hover it (or tap it) and the name's letters flip away
  * one after another while the line closes up, the eik wordmark rises letter by
- * letter, and the red pixel lands last on the i. Leave and it plays back.
+ * letter, and the red flame lands last on the i. Leave and it plays back.
  */
 export default function NameSwap() {
     const reduced = useReducedMotion()
@@ -36,6 +37,7 @@ export default function NameSwap() {
     const [w, setW] = useState(null)
     const name = useRef(null)
     const logo = useRef(null)
+    const via = useRef("touch") // how the last press came in
 
     // Measure both words (fonts can load late, so keep watching).
     useEffect(() => {
@@ -58,7 +60,8 @@ export default function NameSwap() {
 
     return (
         <span
-            className="relative inline-block cursor-default whitespace-nowrap align-baseline"
+            // cursor-pointer on touch screens: iOS only sends taps to things it thinks are clickable
+            className="relative inline-block cursor-default touch-manipulation whitespace-nowrap align-baseline [-webkit-tap-highlight-color:transparent] pointer-coarse:cursor-pointer"
             style={{
                 width: w ? (on ? w.logo : w.name) : undefined,
                 // close up as the name leaves; open up as eik sinks
@@ -66,9 +69,10 @@ export default function NameSwap() {
             }}
             onPointerEnter={(e) => e.pointerType === "mouse" && setOn(true)}
             onPointerLeave={(e) => e.pointerType === "mouse" && setOn(false)}
-            onClick={(e) =>
-                e.nativeEvent.pointerType !== "mouse" && setOn((v) => !v)
-            }
+            // Touch and pen toggle on tap. The pointer type is taken from the
+            // press, since a tap's `click` can report "mouse" (or nothing) on iOS.
+            onPointerDown={(e) => (via.current = e.pointerType)}
+            onClick={() => via.current !== "mouse" && setOn((v) => !v)}
         >
             <span className="sr-only">Sarthak</span>
 
@@ -134,13 +138,7 @@ export default function NameSwap() {
                     }
                 >
                     <g transform="scale(1 -1)">
-                        <rect
-                            x={EIK.pixel.x}
-                            y={EIK.pixel.y}
-                            width={EIK.pixel.size}
-                            height={EIK.pixel.size}
-                            fill="var(--red)"
-                        />
+                        <Flame />
                     </g>
                 </motion.g>
             </svg>

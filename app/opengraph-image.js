@@ -28,13 +28,7 @@ export default function OpengraphImage() {
                     <path d={EIK.e} />
                     <path transform={`translate(${EIK.iX} 0)`} d={EIK.i} />
                     <path transform={`translate(${EIK.kX} 0)`} d={EIK.k} />
-                    <rect
-                        x={EIK.pixel.x}
-                        y={EIK.pixel.y}
-                        width={EIK.pixel.size}
-                        height={EIK.pixel.size}
-                        fill="#e5392e"
-                    />
+                    <path d={EIK.flame[0]} fill="#e5392e" />
                 </g>
             </svg>
             <div style={{ display: "flex", fontSize: 40, color: "#64635d" }}>

@@ -8,14 +8,19 @@ import { sound } from "@/app/_lib/sound"
 import { useReducedMotion } from "@/app/_lib/useReducedMotion"
 
 import BookDetail from "./BookDetail"
+import Candle from "./Candle"
+import Plank from "./Plank"
 import {
     FOOT,
     GAP,
     HALF_UNITS,
     HEAD,
+    LEAN,
+    LEAN_DEG,
     LINE_HEIGHT,
     NAME_SIZE,
     OPEN_EVENT,
+    PLANK,
     READING,
     ROW_UNITS,
     SHELF,
@@ -30,14 +35,26 @@ const LIFT = 7 // px: how high the nearest book rises
 
 const bandRule = "absolute inset-x-[3px] block h-px bg-current opacity-25"
 
-/** The cloth details shared by the shelf and the home-page preview: bands at the head of the spine. */
+/** The cloth details shared by the shelf and the home-page preview: bands at the head and tail of the spine. */
 export function Bands({ band }) {
     if (!band) return null
     return (
         <>
             <span aria-hidden className={bandRule} style={{ top: u(6) }} />
+            <span aria-hidden className={bandRule} style={{ bottom: u(4) }} />
             {band === 2 && (
-                <span aria-hidden className={bandRule} style={{ top: u(9) }} />
+                <>
+                    <span
+                        aria-hidden
+                        className={bandRule}
+                        style={{ top: u(9) }}
+                    />
+                    <span
+                        aria-hidden
+                        className={bandRule}
+                        style={{ bottom: u(2) }}
+                    />
+                </>
             )}
         </>
     )
@@ -57,16 +74,18 @@ export function Ribbon() {
 function Spine({ book, tabbable, dimmed, away, onOpen, onFocus, register }) {
     const tone = TONES[book.spine]
     const reading = book.status === "reading"
+    const leaning = LEAN?.id === book.id
     return (
         <div
             className="relative shrink-0"
-            style={{ width: u(book.width), height: u(book.height) }}
+            style={{
+                width: u(book.width),
+                height: u(book.height),
+                // room at the foot for the lean, so the top rests on the book before
+                marginLeft: leaning ? u(LEAN.gap - GAP) : undefined,
+            }}
         >
-            {/* each book draws the shelf under its own row; the row clips it to the column */}
-            <span
-                aria-hidden
-                className="pointer-events-none absolute -inset-x-[100vw] top-full block h-px bg-[color-mix(in_srgb,var(--ink)_22%,var(--paper))]"
-            />
+            <Plank />
             <button
                 type="button"
                 ref={register}
@@ -75,9 +94,14 @@ function Spine({ book, tabbable, dimmed, away, onOpen, onFocus, register }) {
                 onFocus={onFocus}
                 aria-label={`${book.title} by ${book.author}${reading ? ", reading now" : ""}. Open.`}
                 className={cn(
-                    "group absolute inset-0 block transition-opacity duration-[var(--duration-base)]",
+                    "group absolute inset-0 block origin-bottom-left touch-manipulation transition-opacity duration-[var(--duration-base)] [-webkit-tap-highlight-color:transparent]",
                     dimmed && "opacity-25",
                 )}
+                style={
+                    leaning
+                        ? { transform: `rotate(-${LEAN_DEG}deg)` }
+                        : undefined
+                }
             >
                 {/* the wave moves this wrapper; the button underneath keeps its place so the hover never flickers */}
                 <span
@@ -247,8 +271,11 @@ export default function Bookshelf() {
         }
     }, [isOpen])
 
+    // A finger (touch) only runs along the spines while it's pressed down.
+    const pressing = useRef(false)
     const wave = (e) => {
-        if (reduced || e.pointerType !== "mouse") return
+        if (reduced) return
+        if (e.pointerType !== "mouse" && !pressing.current) return
         const rowHeight = TALLEST + 30
         spines.current.forEach((el) => {
             const r = el.getBoundingClientRect()
@@ -268,6 +295,17 @@ export default function Bookshelf() {
         spines.current.forEach((el) =>
             el.querySelector("[data-lift]")?.style.removeProperty("transform"),
         )
+    const press = (e) => {
+        if (e.pointerType === "mouse") return
+        pressing.current = true
+        wave(e)
+    }
+    const release = (e) => {
+        if (e.pointerType === "mouse") return
+        pressing.current = false
+        // let the pressed book stay up a beat, so the tap reads before it opens
+        setTimeout(calm, 160)
+    }
 
     const onKey = (e) => {
         const i = SHELF.findIndex((b) => b.id === cursor)
@@ -322,16 +360,22 @@ export default function Bookshelf() {
             <div className="@container mt-12">
                 <div
                     onPointerMove={wave}
-                    onPointerLeave={calm}
+                    onPointerLeave={(e) => e.pointerType === "mouse" && calm()}
+                    onPointerDown={press}
+                    onPointerUp={release}
+                    onPointerCancel={release}
                     onKeyDown={onKey}
                     role="toolbar"
                     aria-label="Books. Use the arrow keys to move along the shelf."
                     aria-orientation="horizontal"
-                    className="flex flex-wrap items-end gap-y-10 overflow-x-clip pb-px [--s:min(1px,calc(100cqw/var(--half)))] @[500px]:[--s:min(1px,calc(100cqw/var(--row)))]"
+                    className="flex flex-wrap items-end gap-y-12 overflow-x-clip [--s:min(1px,calc(100cqw/var(--half)))] @[500px]:[--s:min(1px,calc(100cqw/var(--row)))]"
                     style={{
                         "--row": ROW_UNITS,
                         "--half": HALF_UNITS,
                         columnGap: u(GAP),
+                        paddingBottom: u(PLANK + 1),
+                        // vertical swipes still scroll the page; sideways ones run along the spines
+                        touchAction: "pan-y pinch-zoom",
                     }}
                 >
                     {SHELF.map((b) => (
@@ -349,6 +393,7 @@ export default function Bookshelf() {
                             }}
                         />
                     ))}
+                    <Candle />
                 </div>
             </div>
 
